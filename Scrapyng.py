@@ -1,15 +1,40 @@
 import requests
 from bs4 import BeautifulSoup
-import re 
 import pandas as pd 
-import match
 
-url = 'https://www.cnnbrasil.com.br/tecnologia/'
-noticias =  []
-headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'}
-r= requests.get (url, headers=headers)
-soup = BeautifulSoup(r.content, 'html.parser')
-body = soup.find_all('div', class_=re.compile("home__list__tag"))
+lista_noticias = []
 
+response = requests.get('https://g1.globo.com/')
 
-print(body)
+content = response.content
+
+site = BeautifulSoup(content, 'html.parser')
+
+# HTML da noticia 
+noticias = site.findAll('div', attrs={'class':'feed-post-body'})
+
+for noticia in noticias:
+    #Titulo, 'a' são as tags de links 
+    titulo = noticia.find('a', attrs={'class': 'feed-post-link'})
+
+    #print(titulo.text)
+    #Link da noticia 
+    #print(titulo['href'])
+
+    #Subtitulo
+    subtitulo = noticia.find('div', attrs={'class', 'feed-post-body-resumo'})
+
+    #Verificando se o subtitulo existe, se exister sera capturado 
+    if (subtitulo):
+        print(subtitulo)
+        #Salvando a lista com titulo, subtitulo e link
+        lista_noticias.append([titulo.text, subtitulo.text, titulo['href']])
+    else:
+        lista_noticias.append([titulo.text, '' , titulo['href']])
+
+news = pd.DataFrame(lista_noticias, columns=['Titulo', 'Subtitulo', 'Link'])
+
+#Salando a lista em formato de tabela excel
+#news.to_excel('noticias.xlsx', index=False)
+
+print(news)
