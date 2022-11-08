@@ -28,9 +28,9 @@ for noticia in noticias:
     if (subtitulo):
         print(subtitulo)
         #Salvando a lista com titulo, subtitulo e link
-        lista_noticias.append([titulo.text, subtitulo.text, titulo])
+        lista_noticias.append([titulo.text, subtitulo.text, titulo['href']])
     else:
-        lista_noticias.append([titulo.text, '' , titulo])
+        lista_noticias.append([titulo.text, '' , titulo['href']])
 
 news = pd.DataFrame(lista_noticias, columns=['Titulo', 'Subtitulo', 'Link'])
 
