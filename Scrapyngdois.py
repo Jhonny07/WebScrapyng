@@ -11,7 +11,7 @@ content = response.content
 site = BeautifulSoup(content, 'html.parser')
 
 # HTML da noticia 
-noticias = site.findAll('div', attrs={'class':'feed-post-body'})
+noticias = site.findAll('div', attrs={'class': 'feed-post-body'})
 
 for noticia in noticias:
     #Titulo, 'a' são as tags de links 
@@ -28,9 +28,9 @@ for noticia in noticias:
     if (subtitulo):
         print(subtitulo)
         #Salvando a lista com titulo, subtitulo e link
-        lista_noticias.append([titulo.text, subtitulo.text, titulo['href']])
+        lista_noticias.append([titulo.text, subtitulo.text, titulo])
     else:
-        lista_noticias.append([titulo.text, '' , titulo['href']])
+        lista_noticias.append([titulo.text, '' , titulo])
 
 news = pd.DataFrame(lista_noticias, columns=['Titulo', 'Subtitulo', 'Link'])
 
